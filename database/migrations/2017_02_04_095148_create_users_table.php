@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('dopname', 80);
             $table->string('phone', 60);
             $table->integer('role_id')->unsigned()->default(2);
-            $table->boolean('valid')->default(true);
+            $table->boolean('valid')->default(false);
             $table->boolean('confirmed')->default(false);
             $table->string('confirmation_code')->nullable();
             $table->rememberToken();

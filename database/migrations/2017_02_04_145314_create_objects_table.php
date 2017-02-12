@@ -21,10 +21,10 @@ class CreateObjectsTable extends Migration
             $table->integer('category_id')->unsigned();
             $table->integer('year')->unsigned();
             $table->string('name_period', 20)->nullable();
-            $table->integer('min_period')->unsigned();
+            $table->integer('min_period')->nullable();
             $table->float('price', 10,2);
             $table->integer('owner_id')->unsigned();
-            $table->datetime('free_since');
+            $table->datetime('free_since')->nullable();
             $table->boolean('disabled')->default(false);
             $table->integer('customer_id')->unsigned()->nullable();
             $table->timestamps();

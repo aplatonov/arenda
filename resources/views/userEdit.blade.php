@@ -9,7 +9,7 @@
 
                 <div class="panel-body">
 
-                    <form class="form-horizontal" role="form" method="POST" action="{{ action('UserController@update', ['user'=>Auth::user()->id]) }}">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ action('UserController@update', ['user'=>$user->id]) }}">
                         {{ csrf_field() }}
                         {{ method_field('PUT') }}
 
@@ -73,9 +73,20 @@
                                 @endif
                             </div>
                         </div>
+                        @if (!Auth::guest() && Auth::user()->confirmed == 0)
+                            <div class="form-group">
+                                <label class="col-md-10 control-label"><span class="badge badge-important">Логин не подтвержден!</span><br><small>Вы не можете добавлять объекты и просматривать контактные данные</small>
+                            </div>
+                        @endif
+                        @if (!Auth::guest() && Auth::user()->valid == 0)
+                            <div class="form-group">
+                                <label class="col-md-4 control-label"></label>
+                                <label class="col-md-6 control-label"><span class="badge badge-warning">Логин заблокирован!</span><br><small>обратитесь к администратору</small>
+                            </div>
+                        @endif
 
                         <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
+                            <div class="col-md-6 col-md-offset-4 text-right">
                                 <button type="submit" class="btn btn-primary">
                                     Сохранить
                                 </button>

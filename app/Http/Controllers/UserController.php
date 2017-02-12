@@ -3,6 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Input;
+use Exception;
+use Response;
 use App\Users;
 
 class UserController extends Controller
@@ -26,6 +35,96 @@ class UserController extends Controller
     {
         return redirect('home');
     }
+
+    /**
+     * Show the admin dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showUsers()
+    {
+        $users = Users::paginate(config('app.users_on_page_admin'));
+        Session::put('page', $users->currentPage());
+
+        return view('layouts/admin/users', ['users' => $users, 'message'=>'']);
+    }
+
+    /**
+     * Destroy a user instance after by valid user role.
+     *
+     * @param  integer  $id
+     * @return string
+     */
+    public function destroyUser($id)
+    {
+        if (Auth::user()->role_id == 1) {
+            $user = Users::findOrFail($id);
+            $username = $user->username;
+            try {
+                $user->delete();
+                return redirect()->back()->with('message', 'Пользователь '.$username.' удален');
+            } catch (Exception $e) {
+                return redirect()->back()->with('message', 'Невозможно удалить пользователя '.$username);
+            }
+        } else {
+            return redirect()->back()->with('message', 'Недостаточно прав для удаления пользователя');
+        }
+    }
+
+        /**
+     * Confirm user registration in DB
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function confirmUser(Request $request)
+    {
+        if (Auth::user()->role_id == 1) {
+            $user = Users::findOrFail($request->input('user_id'));
+            $user->confirmed = 1;
+            $user->save();
+            $data = array( 'text' => 'success' );
+        } else {
+            $data = array( 'text' => 'fail' );
+        }
+        return Response::json($data);
+    }
+    /**
+     * Set in DB block field for user
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function blockUser(Request $request)
+    {
+        if (Auth::user()->role_id == 1) {
+            $user = Users::findOrFail($request->input('user_id'));
+            $user->valid = $request->input('action');
+            $user->save();
+            $data = array( 'text' => 'success' );
+        } else {
+            $data = array( 'text' => 'fail' . $request->input('action') );
+        }
+        return Response::json($data);
+    }         
+    /**
+     * Grant user administrator rights in DB
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function adminUser(Request $request)
+    {
+        if (Auth::user()->role_id == 1) {
+            $user = Users::findOrFail($request->input('user_id'));
+            $user->role_id = $request->input('action');
+            $user->save();
+            $data = array( 'text' => 'success' );
+        } else {
+            $data = array( 'text' => 'fail' . $request->input('action') );
+        }
+        return Response::json($data);
+    }     
 
     /**
      * Show the form for creating a new resource.
@@ -91,7 +190,13 @@ class UserController extends Controller
         $form = $request->all();
         $user->update($form);
 
-        return redirect('home')->with('message','Данные пользователя обновлены успешно.');
+        if (Auth::user()->role_id == 1) {
+            return redirect('/admin/users?page=' . Session::get('page',1))->with('message','Данные пользователя обновлены успешно.');
+        }
+        else
+        {
+            return redirect('home')->with('message','Данные пользователя обновлены успешно.'); 
+        }
     }
 
     /**

@@ -124,6 +124,23 @@ return [
 
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Paginate Settings
+    |--------------------------------------------------------------------------
+    |
+    | Here you may set items count to output by page
+    |
+    */
+
+    'objects_on_page' => 4,
+
+    'objects_on_page_admin' => 15,
+
+    'users_on_page_admin' => 3,
+
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -176,6 +193,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\ComposerServiceProvider::class,
 
     ],
 

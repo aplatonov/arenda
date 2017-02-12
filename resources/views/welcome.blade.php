@@ -69,25 +69,31 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @if (Auth::check())
-                        <a href="{{ url('/home') }}">Home</a>
+                        <a href="{{ url('/objects') }}">Домашняя страница</a>
                     @else
-                        <a href="{{ url('/login') }}">Login</a>
-                        <a href="{{ url('/register') }}">Register</a>
+                        <a href="{{ url('/login') }}">Вход</a>
+                        <a href="{{ url('/register') }}">Регистрация</a>
                     @endif
                 </div>
             @endif
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    Arenda
                 </div>
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                <div>
+                    <p>Для входа в систему необходимо зарегистрироваться.<br><br>
+                    Реализовано:<br>
+                    1. Регистрация пользователей, редактирование профиля<br>
+                    2. Размещение пользователем объейта<br>
+                    3. Управление администратором списком пльзователей<br>
+                    4. Просмотр/редактирование объектов<br>
+                    5. Вывод списка объекто с возможностью сортировки<br>
+
+                    <br>
+                    Логин/пароль администратора: admin/admin<br>
+                    </p>
                 </div>
             </div>
         </div>
