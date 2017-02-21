@@ -14,6 +14,7 @@ use Exception;
 use Response;
 use App\Users;
 use App\Requests;
+use App\Categories;
 
 class RequestController extends Controller
 {
@@ -146,6 +147,52 @@ class RequestController extends Controller
         }
 
         return view('layouts/requests', ['data' => $data, 'title'=>' пользователя '.$username]);
+    }
+
+    /**
+     * Show the admin dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexCategoryRequests(Request $request, $category_id)
+    {
+        $order = $request->get('order');
+        $dir = $request->get('dir');
+        $page_appends = null;
+
+        //показываем заявки нужной категории
+        if (Auth::user()->role_id == 1)
+        {
+            //админу показываем все заявки
+            $requests = Requests::whereIn('disabled', [0, 1])->where('category_id', $category_id);
+        }
+        else
+        {
+            //пользователю показываем незаблокированные заявки и его собственнные заблокированные
+            $requests = Requests::where('disabled', 0)->where('category_id', $category_id)
+                ->orWhere(function ($query) {
+                    $query->where('owner_id', Auth::user()->id)
+                        ->where('disabled', 1);
+                });
+        }
+
+        if ($order && $dir) {
+            $requests = $requests->orderBy($order, $dir);
+            $page_appends = [
+                'order' => $order,
+                'dir' => $dir,
+            ];
+        }
+
+        $requests = $requests->paginate(config('app.objects_on_page'));
+
+        $data['requests'] = $requests;
+        $data['dir'] = $dir == 'asc' ? 'desc' : 'asc';
+        $data['page_appends'] = $page_appends;
+
+        $name_cat = Categories::findOrFail($category_id)->name_cat;
+
+        return view('layouts.requests', ['data' => $data, 'title'=>' категории '.$name_cat]);
     }
 
     /**

@@ -28,6 +28,11 @@
                     <span class="badge">9</span> В карточке пользователя добавлено поле "Оплата до"<br>
                     <span class="badge">10</span> Главная страница зарегистрированного пользователя разделена на 2 части: объекты и заявки с возможностью установки фильтра<br>
                     <span class="badge">11</span> Невозможно снять права администратора с самого себя и администратора <span class="label label-primary">admin</span><br>
+                    <hr>
+                    <span class="badge">12</span> Древовидная структура категорий (добавление/редактирование/удаление)<br>
+                    <span class="badge">13</span> Мои объекты/Мои заявки<br>
+                    <span class="badge">14</span> Структура категорий интегрирована в меню<br>
+                    <span class="badge">15</span> Сортировка пользователей<br>
                     <br>
                     Логин/пароль администратора: <span class="label label-primary">admin/admin</span><br>
                     Логин/пароль пользователя: <span class="label label-info">user/user</span><br>

@@ -65,7 +65,7 @@
                     </ul>
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right">
+                    <ul class="nav navbar-nav navbar-left">
                         <!-- Authentication Links -->
                         @if (!Auth::guest() && Auth::user()->role_id == 1)
                             <li class="dropdown">
@@ -80,7 +80,24 @@
                             <li><a href="{{ route('login') }}">Вход</a></li>
                             <li><a href="{{ route('register') }}">Регистрация</a></li>
                         @else
-                            <li><a href="{{ url('/requests') }}">Заявки</a></li>
+                            <!--li><a href="{{ url('/requests') }}">Заявки</a></li-->
+                            <li class="root">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="{{ url('/requests') }}">Заявки<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ url('/requests') }}">Все заявки</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    @foreach($categories as $category)
+                                        @if(count($category->childs))
+                                            <li class="dropdown-submenu">
+                                                <a class="dropdown-toggle" href="{{ url('/requests/category/' . $category->id ) }}">{{ $category->name_cat }} <span class="badge">{{ count($category->requests) }}</span></a>
+                                                @include('layouts.manageReqChildMenu',['childs' => $category->childs])
+                                            </li>
+                                        @else
+                                            <li><a href="{{ url('/requests/category/' . $category->id ) }}">{{ $category->name_cat }} <span class="badge">{{ count($category->requests) }}</span></a></li>
+                                        @endif
+                                    @endforeach
+                                </ul>
+                            </li>
                             <li class="root">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="{{ url('/objects') }}">Объекты<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
@@ -89,11 +106,11 @@
                                     @foreach($categories as $category)
                                         @if(count($category->childs))
                                             <li class="dropdown-submenu">
-                                                <a class="dropdown-toggle" href="{{ url('/objects/category/' . $category->id ) }}">{{ $category->name_cat }} [{{ count($category->objects) }}]</a>
+                                                <a class="dropdown-toggle" href="{{ url('/objects/category/' . $category->id ) }}">{{ $category->name_cat }} <span class="badge">{{ count($category->objects) }}</span></a>
                                                 @include('layouts.manageObjChildMenu',['childs' => $category->childs])
                                             </li>
                                         @else
-                                            <li><a href="{{ url('/objects/category/' . $category->id ) }}">{{ $category->name_cat }} [{{ count($category->lots) }}]</a></li>
+                                            <li><a href="{{ url('/objects/category/' . $category->id ) }}">{{ $category->name_cat }} <span class="badge">{{ count($category->objects) }}</span></a></li>
                                         @endif
                                     @endforeach
                                 </ul>

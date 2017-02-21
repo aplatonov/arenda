@@ -41,12 +41,30 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function showUsers()
+    public function showUsers(Request $request)
     {
-        $users = Users::paginate(config('app.users_on_page_admin'));
+        $order = $request->get('order'); 
+        $dir = $request->get('dir'); 
+        $page_appends = null;
+
+        $users = Users::whereIn('valid', [0, 1]);
+
+        if ($order && $dir) {
+            $users = $users->orderBy($order, $dir);
+            $page_appends = [
+                'order' => $order,
+                'dir' => $dir,
+            ];
+        } 
+
+        $users = $users->paginate(config('app.users_on_page_admin'));
         Session::put('page', $users->currentPage());
 
-        return view('layouts/admin/users', ['users' => $users, 'message'=>'']);
+        $data['users'] = $users;
+        $data['dir'] = $dir == 'asc' ? 'desc' : 'asc';
+        $data['page_appends'] = $page_appends;
+
+        return view('layouts/admin/users', ['data' => $data, 'message'=>'']);
     }
 
     /**

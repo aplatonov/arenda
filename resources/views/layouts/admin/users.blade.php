@@ -131,17 +131,17 @@
 
                     <table class="table table-striped table-hover table-condensed">
                     <tr>
-                        <th>ID</th>
-                        <th>Login</th>
-                        <th>Имя</th>
-                        <th>Телефон, e-mail</th>
-                        <th class="text-center">Дать роль</th>
-                        <th class="text-center">Подтвержден</th>
-                        <th class="text-center">Просмотр контактов</th>
+                        <th><a href="?page={{ $data['users']->currentPage() }}&order=id&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">ID</a>{!! $data['page_appends']['order'] == 'id' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th><a href="?page={{ $data['users']->currentPage() }}&order=login&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Login</a>{!! $data['page_appends']['order'] == 'login' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th><a href="?page={{ $data['users']->currentPage() }}&order=name&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Имя</a>{!! $data['page_appends']['order'] == 'name' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th><a href="?page={{ $data['users']->currentPage() }}&order=phone&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Телефон, e-mail</a>{!! $data['page_appends']['order'] == 'phone' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th class="text-center"><a href="?page={{ $data['users']->currentPage() }}&order=role_id&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Дать роль</a>{!! $data['page_appends']['order'] == 'role_id' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th class="text-center"><a href="?page={{ $data['users']->currentPage() }}&order=confirmed&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Подтвержден</a>{!! $data['page_appends']['order'] == 'confirmed' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th class="text-center"><a href="?page={{ $data['users']->currentPage() }}&order=valid&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Просмотр контактов</a>{!! $data['page_appends']['order'] == 'valid' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
                         <th class="text-right">Удалить</th>
                     </tr>
 
-                    @foreach($users as $user)
+                    @foreach($data['users'] as $user)
                         <tr> 
                             <td><a href="/users/{{ $user->id }}/edit">{{ $user->id }}</a></td>
                             <td><a href="/users/{{ $user->id }}/edit">{{ $user->login }}</a></td>
@@ -209,7 +209,7 @@
                     @endforeach
                     </table>
                 </div>
-                <div class="panel-footer">{{ $users->links('vendor.pagination.default') }}</div>
+                <div class="panel-footer">{!! $data['users']->appends($data['page_appends'])->links('vendor.pagination.default') !!}</div>
             </div>
         </div>
     </div>

@@ -49,3 +49,4 @@ Route::delete('/requests/delete/{id}','RequestController@destroyRequest');
 Route::post('/requests/info/{id}','RequestController@showRequestContact');
 Route::post('/requests/block/{id}','RequestController@blockRequest');
 Route::get('/userrequests', 'RequestController@indexUserRequests');
+Route::get('/requests/category/{id}','RequestController@indexCategoryRequests');
