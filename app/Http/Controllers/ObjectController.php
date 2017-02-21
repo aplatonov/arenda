@@ -14,6 +14,7 @@ use Exception;
 use Response;
 use App\Users;
 use App\Objects;
+use App\Categories;
 
 class ObjectController extends Controller
 {
@@ -133,7 +134,90 @@ class ObjectController extends Controller
         $data['dir'] = $dir == 'asc' ? 'desc' : 'asc';
         $data['page_appends'] = $page_appends;
 
-        return view('layouts/objects', ['data' => $data, 'message'=>'']);
+        return view('layouts.objects', ['data' => $data, 'message'=>'']);
+    }
+
+    /**
+     * Show the admin dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexUserObjects(Request $request)
+    {
+        $order = $request->get('order');
+        $dir = $request->get('dir');
+        $page_appends = null;
+
+        //хозяину показываем все лоты
+        $objects = Objects::whereIn('disabled', [0, 1])->where('owner_id', Auth::user()->id);
+
+        if ($order && $dir) {
+            $objects = $objects->orderBy($order, $dir);
+            $page_appends = [
+                'order' => $order,
+                'dir' => $dir,
+            ];
+        }
+
+        $objects = $objects->paginate(config('app.objects_on_page'));
+
+        $data['objects'] = $objects;
+        $data['dir'] = $dir == 'asc' ? 'desc' : 'asc';
+        $data['page_appends'] = $page_appends;
+
+        if (Auth::check()) {
+            $username = Auth::user()->name . ' (' . Auth::user()->login . ')';
+        } else {
+            $username = '';
+        }
+
+        return view('layouts.objects', ['data' => $data, 'title'=>' пользователя '.$username]);
+    }
+
+    /**
+     * Show the admin dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexCategoryObjects(Request $request, $category_id)
+    {
+        $order = $request->get('order');
+        $dir = $request->get('dir');
+        $page_appends = null;
+
+        //показываем объекты нужной категории
+        if (Auth::user()->role_id == 1)
+        {
+            //админу показываем все объекты
+            $objects = Objects::whereIn('disabled', [0, 1])->where('category_id', $category_id);
+        }
+        else
+        {
+            //пользователю показываем незаблокированные объекты и его собственнные заблокированные
+            $objects = Objects::where('disabled', 0)->where('category_id', $category_id)
+                ->orWhere(function ($query) {
+                    $query->where('owner_id', Auth::user()->id)
+                        ->where('disabled', 1);
+                });
+        }
+
+        if ($order && $dir) {
+            $objects = $objects->orderBy($order, $dir);
+            $page_appends = [
+                'order' => $order,
+                'dir' => $dir,
+            ];
+        }
+
+        $objects = $objects->paginate(config('app.objects_on_page'));
+
+        $data['objects'] = $objects;
+        $data['dir'] = $dir == 'asc' ? 'desc' : 'asc';
+        $data['page_appends'] = $page_appends;
+
+        $name_cat = Categories::findOrFail($category_id)->name_cat;
+
+        return view('layouts.objects', ['data' => $data, 'title'=>' категории '.$name_cat]);
     }
 
     /**

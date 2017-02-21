@@ -13,7 +13,7 @@
             @endif
             &nbsp;
             @if (count($child->objects) == 0 && count($child->requests) == 0)
-                <a href="/admin/categories/delete/{{ $child->id }}" rel="tooltip" title="Удалить"><i class="glyphicon glyphicon-trash"></i></a>&nbsp;
+                <a href="/admin/categories/delete/{{ $child->id }}" rel="tooltip" title="Удалить" onclick="return confirm('Удалить категорию?')"><i class="glyphicon glyphicon-trash"></i></a>&nbsp;
             @endif
             <a href="/admin/categories/edit/{{ $child->id }}" rel="tooltip" title="Редактировать"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
             <a href="/admin/categories/add/{{ $child->id }}" rel="tooltip" title="Добавить дочерний элемент"><i class="glyphicon glyphicon-leaf"></i></a>

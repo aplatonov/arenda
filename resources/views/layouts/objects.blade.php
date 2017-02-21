@@ -44,7 +44,7 @@
                 </div>
             @endif
             <div class="panel panel-default h6">
-                <div class="panel-heading"><strong>Список объектов</strong></div>
+                <div class="panel-heading"><strong>Список объектов {{ $title or '' }}</strong></div>
 
                 <div class="panel-body text-center"></div>
                 
@@ -52,11 +52,11 @@
 
                     <table class="table table-striped table-hover table-condensed">
                     <tr>
-                        <th class="text-center"><a href="/objects?page={{ $data['objects']->currentPage() }}&order=id&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Код</a>{!! $data['page_appends']['order'] == 'id' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
-                        <th><a href="/objects?page={{ $data['objects']->currentPage() }}&order=object_name&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Название</a>{!! $data['page_appends']['order'] == 'object_name' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
-                        <th class="text-center"><a href="/objects?page={{ $data['objects']->currentPage() }}&order=year&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Год</a>{!! $data['page_appends']['order'] == 'year' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
-                        <th class="text-center"><a href="/objects?page={{ $data['objects']->currentPage() }}&order=price&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Цена</a>{!! $data['page_appends']['order'] == 'price' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
-                        <th class="text-center"><a href="/objects?page={{ $data['objects']->currentPage() }}&order=free_since&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Доступен</a>{!! $data['page_appends']['order'] == 'free_since' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th class="text-center"><a href="?page={{ $data['objects']->currentPage() }}&order=id&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Код</a>{!! $data['page_appends']['order'] == 'id' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th><a href="?page={{ $data['objects']->currentPage() }}&order=object_name&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Название</a>{!! $data['page_appends']['order'] == 'object_name' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th class="text-center"><a href="?page={{ $data['objects']->currentPage() }}&order=year&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Год</a>{!! $data['page_appends']['order'] == 'year' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th class="text-center"><a href="?page={{ $data['objects']->currentPage() }}&order=price&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Цена</a>{!! $data['page_appends']['order'] == 'price' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th class="text-center"><a href="?page={{ $data['objects']->currentPage() }}&order=free_since&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Доступен</a>{!! $data['page_appends']['order'] == 'free_since' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
                         <th class="text-center">Конт. инф.</th>
                         <th class="text-right"></th>
                     </tr>

@@ -13,6 +13,11 @@ class Categories extends Model
 
         return $this->hasMany('App\Categories','parent_id','id') ;
     }
+
+    public function parent() {
+
+        return $this->hasOne('App\Categories','id','parent_id') ;
+    }
 	
 	public function objects()
 	{

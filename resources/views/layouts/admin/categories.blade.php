@@ -73,7 +73,7 @@
                 </div>
             @endif
             <div class="panel panel-default h6">
-                <div class="panel-heading"><strong>Управление категориями (не доделано)</strong></div>
+                <div class="panel-heading"><strong>Управление категориями</strong></div>
 
                 <div class="panel-body text-center"></div>
 
@@ -95,7 +95,7 @@
                             @endif
                             &nbsp;
                             @if (count($category->objects) == 0 && count($category->requests) == 0)
-                                <a href="/admin/categories/delete/{{ $category->id }}" rel="tooltip" title="Удалить"><i class="glyphicon glyphicon-trash"></i></a>&nbsp;
+                                <a href="/admin/categories/delete/{{ $category->id }}" rel="tooltip" title="Удалить" onclick="return confirm('Удалить категорию?')"><i class="glyphicon glyphicon-trash"></i></a>&nbsp;
                             @endif
                             <a href="/admin/categories/edit/{{ $category->id }}" rel="tooltip" title="Редактировать"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
                             <a href="/admin/categories/add/{{ $category->id }}" rel="tooltip" title="Добавить дочерний элемент"><i class="glyphicon glyphicon-leaf"></i></a>
@@ -105,7 +105,7 @@
                             @endif
                         </li>
                     @endforeach
-                    <li><i class="indicator glyphicon glyphicon-leaf"></i>&nbsp;<a href="{{ url('/categories/add/0') }}">Добавить корневую категорию</a>
+                    <li><i class="indicator glyphicon glyphicon-leaf"></i>&nbsp;<a href="{{ url('/admin/categories/add/0') }}">Добавить корневую категорию</a>
                 </ul>
             </div>
         </div>

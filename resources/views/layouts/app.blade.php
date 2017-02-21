@@ -24,6 +24,7 @@
     <link href="/css/app.css" rel="stylesheet">
     <link href="/css/datepicker.css" rel="stylesheet">
     <link href="/css/treeview.css" rel="stylesheet">
+    <link href="/css/submenu.css" rel="stylesheet">
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
@@ -79,8 +80,24 @@
                             <li><a href="{{ route('login') }}">Вход</a></li>
                             <li><a href="{{ route('register') }}">Регистрация</a></li>
                         @else
-                            <li><a href="{{ url('/objects') }}">Объекты</a></li>
                             <li><a href="{{ url('/requests') }}">Заявки</a></li>
+                            <li class="root">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="{{ url('/objects') }}">Объекты<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ url('/objects') }}">Все объекты</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    @foreach($categories as $category)
+                                        @if(count($category->childs))
+                                            <li class="dropdown-submenu">
+                                                <a class="dropdown-toggle" href="{{ url('/objects/category/' . $category->id ) }}">{{ $category->name_cat }} [{{ count($category->objects) }}]</a>
+                                                @include('layouts.manageObjChildMenu',['childs' => $category->childs])
+                                            </li>
+                                        @else
+                                            <li><a href="{{ url('/objects/category/' . $category->id ) }}">{{ $category->name_cat }} [{{ count($category->lots) }}]</a></li>
+                                        @endif
+                                    @endforeach
+                                </ul>
+                            </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -91,9 +108,12 @@
                                         <li><a href="{{ url('/objects/create') }}">Добавить объект</a></li>
                                         <li><a href="{{ url('/requests/create') }}">Добавить заявку</a></li>
                                     @endif
+                                    <li><a href="{{ url('/userobjects') }}">Мои объекты</a></li>
+                                    <li><a href="{{ url('/userrequests') }}">Мои заявки</a></li>
+
                                     <li><a href="/users/{{Auth::user()->id}}/edit">Редактировать профиль</a></li>
                                     <li><a href="/home">На главную</a></li>
-                                    <li>&nbsp;</li>
+                                    <li role="separator" class="divider"></li>
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();

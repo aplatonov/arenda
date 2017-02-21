@@ -44,7 +44,7 @@
                 </div>
             @endif
             <div class="panel panel-default h6">
-                <div class="panel-heading"><strong>Список заявок</strong></div>
+                <div class="panel-heading"><strong>Список заявок {{ $title or '' }}</strong></div>
 
                 <div class="panel-body text-center"></div>
                 
@@ -52,10 +52,10 @@
 
                     <table class="table table-striped table-hover table-condensed">
                     <tr>
-                        <th class="text-center"><a href="/requests?page={{ $data['requests']->currentPage() }}&order=id&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Код</a>{!! $data['page_appends']['order'] == 'id' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
-                        <th><a href="/requests?page={{ $data['requests']->currentPage() }}&order=request_name&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Наименование</a>{!! $data['page_appends']['order'] == 'request_name' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
-                        <th class="text-center"><a href="/requests?page={{ $data['requests']->currentPage() }}&order=start_date&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Начало периода</a>{!! $data['page_appends']['order'] == 'start_date' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
-                        <th class="text-center"><a href="/requests?page={{ $data['requests']->currentPage() }}&order=finish_date&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Конец периода</a>{!! $data['page_appends']['order'] == 'finish_date' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th class="text-center"><a href="?page={{ $data['requests']->currentPage() }}&order=id&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Код</a>{!! $data['page_appends']['order'] == 'id' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th><a href="?page={{ $data['requests']->currentPage() }}&order=request_name&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Наименование</a>{!! $data['page_appends']['order'] == 'request_name' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th class="text-center"><a href="?page={{ $data['requests']->currentPage() }}&order=start_date&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Начало периода</a>{!! $data['page_appends']['order'] == 'start_date' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th class="text-center"><a href="?page={{ $data['requests']->currentPage() }}&order=finish_date&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Конец периода</a>{!! $data['page_appends']['order'] == 'finish_date' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
                         <th class="text-center">Конт. инф.</th>
                         <th class="text-right"></th>
                     </tr>

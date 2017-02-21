@@ -116,6 +116,38 @@ class RequestController extends Controller
         return view('layouts/requests', ['data' => $data, 'message'=>'']);
     }
 
+    public function indexUserRequests(Request $request)
+    {
+        $order = $request->get('order');
+        $dir = $request->get('dir');
+        $page_appends = null;
+
+        //хозяину показываем все заявки
+        $requests = Requests::whereIn('disabled', [0, 1])->where('owner_id', Auth::user()->id);
+
+        if ($order && $dir) {
+            $requests = $requests->orderBy($order, $dir);
+            $page_appends = [
+                'order' => $order,
+                'dir' => $dir,
+            ];
+        }
+
+        $requests = $requests->paginate(config('app.objects_on_page'));
+
+        $data['requests'] = $requests;
+        $data['dir'] = $dir == 'asc' ? 'desc' : 'asc';
+        $data['page_appends'] = $page_appends;
+
+        if (Auth::check()) {
+            $username = Auth::user()->name . ' (' . Auth::user()->login . ')';
+        } else {
+            $username = '';
+        }
+
+        return view('layouts/requests', ['data' => $data, 'title'=>' пользователя '.$username]);
+    }
+
     /**
      * Display the specified resource.
      *
