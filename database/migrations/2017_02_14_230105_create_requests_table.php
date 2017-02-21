@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateObjectsTable extends Migration
+class CreateRequestsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,25 +13,21 @@ class CreateObjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('objects', function (Blueprint $table) {
+        Schema::create('requests', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('object_name', 191)->unique();
-            $table->text('description');
-            $table->string('images', 250)->nullable();
+            $table->string('request_name', 191)->unique();
+            $table->text('comment');
             $table->integer('category_id')->unsigned();
-            $table->integer('year')->unsigned();
-            $table->string('name_period', 20)->nullable();
-            $table->integer('min_period')->nullable();
-            $table->float('price', 10,2);
+            $table->datetime('start_date')->nullable();
+            $table->datetime('finish_date')->nullable();
             $table->integer('owner_id')->unsigned();
-            $table->datetime('free_since')->nullable();
-            $table->boolean('disabled')->default(false);
             $table->integer('customer_id')->unsigned()->nullable();
+            $table->boolean('disabled')->default(false);
             $table->timestamps();
         });
 
 
-        Schema::table('objects', function (Blueprint $table) {
+        Schema::table('requests', function (Blueprint $table) {
             $table->foreign('owner_id')->references('id')->on('users')
                         ->onDelete('restrict')
                         ->onUpdate('cascade');
@@ -42,7 +38,7 @@ class CreateObjectsTable extends Migration
                         ->onDelete('restrict')
                         ->onUpdate('cascade');
 
-        });        
+        });   
     }
 
     /**
@@ -52,12 +48,12 @@ class CreateObjectsTable extends Migration
      */
     public function down()
     {
-        Schema::table('objects', function (Blueprint $table) {
-            $table->dropForeign('objects_owner_id_foreign');
-            $table->dropForeign('objects_category_id_foreign');
-            $table->dropForeign('objects_customer_id_foreign');
+        Schema::table('requests', function (Blueprint $table) {
+            $table->dropForeign('requests_owner_id_foreign');
+            $table->dropForeign('requests_category_id_foreign');
+            $table->dropForeign('requests_customer_id_foreign');
         });
 
-        Schema::drop('objects');
+        Schema::drop('requests');
     }
 }

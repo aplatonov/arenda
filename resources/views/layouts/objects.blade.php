@@ -20,7 +20,7 @@
                         if (response.text == 'success') {
                             $("#objectInfo"+object_id).html(response.object_info);
                         } else {
-                            console.log(response.text + ' Не хватает прав для подтверждения пользователя.');
+                            console.log(response.text + ' Не хватает прав для получения информации об объекте.');
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
@@ -70,7 +70,7 @@
                                 {{ $object->price }}{{ isset($object->name_period) ? '/' . $object->name_period : '' }}<br>
                                 {{ isset($object->min_period) ? 'Мин. заказ ' . $object->min_period . ' ' . $object->name_period : ''}}</a>
                             </td>
-                            <td class="text-center">{{ isset($object->free_since) ? 'c ' . Carbon\Carbon::parse($object->free_since)->format('d-m-Y') : 'сейчас' }}</td>
+                            <td class="text-center">{{ isset($object->free_since) ? \Carbon\Carbon::now()<$object->free_since ? 'c ' . \Carbon\Carbon::parse($object->free_since)->format('d-m-Y') : 'сейчас' : 'сейчас' }}</td>
                             <td class="text-center">
                                 @if (!Auth::guest() && Auth::user()->confirmed == 1 && Auth::user()->valid == 1)
                                     <div id="objectInfo{{ $object->id }}">

@@ -73,7 +73,13 @@
                             <label for="name_period" class="col-md-4 control-label">Период сдачи</label>
 
                             <div class="col-md-6">
-                                <input id="name_period" type="text" class="form-control input-sm" name="name_period" value="{{ $object->name_period }}" placeholder="час, сутки и пр.">
+                                <!--input id="name_period" type="text" class="form-control input-sm" name="name_period" value="{{ $object->name_period }}" placeholder="час, сутки и пр."-->
+                                <select id="name_period" name="name_period" class="form-control input-sm" name="name_period">
+                                    <option {{ $object->name_period == 'час' ? 'selected' : '' }} value="час">час</option>
+                                    <option {{ $object->name_period == 'сут.' ? 'selected' : '' }} value="сут.">сут.</option>
+                                    <option {{ $object->name_period == 'нед.' ? 'selected' : '' }} value="нед.">нед.</option>
+                                    <option {{ $object->name_period == 'мес.' ? 'selected' : '' }} value="мес.">мес.</option>
+                                </select>
 
                                 @if ($errors->has('name_period'))
                                     <span class="help-block">

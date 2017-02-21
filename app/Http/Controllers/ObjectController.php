@@ -211,8 +211,8 @@ class ObjectController extends Controller
     
     public function blockObject(Request $request)
     {
-        if (Auth::user()->role_id == 1) {
-            $object = Objects::findOrFail($request->input('object_id'));
+        $object = Objects::findOrFail($request->input('object_id'));
+        if (Auth::user()->role_id == 1 || Auth::user()->id == $object->owner_id) {
             $object->disabled = $request->input('action');
             $object->save();
             $data = array( 'text' => 'success' );

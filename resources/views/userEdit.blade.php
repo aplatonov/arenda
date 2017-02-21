@@ -15,7 +15,9 @@
 
                         <div class="form-group">
                             <label class="col-md-4 control-label">Логин</label>
-                            <label class="col-md-6 control-label">{{ $user->login }}</label>
+                            <div class="col-md-6">
+                                <p class="form-control-static">{{ $user->login }}</p>
+                            </div>
                         </div>
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
@@ -73,6 +75,40 @@
                                 @endif
                             </div>
                         </div>
+
+                        @if (Auth::user()->role_id == 1)
+                            <div class="form-group{{ $errors->has('pay_till') ? ' has-error' : '' }}">
+                                <label for="pay_till" class="col-md-4 control-label">Оплачено до</label>
+
+                                <div class="col-md-6">
+                                    <input id="pay_till" type="text" class="form-control input-sm" name="pay_till" value="{{ isset($user->pay_till) ? Carbon\Carbon::parse($user->pay_till)->format('Y-m-d') : '' }}">
+
+                                    @if ($errors->has('pay_till'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('pay_till') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <script type="text/javascript">
+                                $(function () {
+                                    $('#pay_till').datepicker({
+                                        format: "yyyy-mm-dd",
+                                        weekStart: 1,
+                                        autoClose: true
+                                    });
+                                });
+                            </script>
+                        @else
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">Оплата до</label>
+                                <div class="col-md-6">
+                                    <p class="form-control-static">{{ isset($user->pay_till) ? Carbon\Carbon::parse($user->pay_till)->format('Y-m-d') : '' }}</p>
+                                </div>
+                            </div>
+                        @endif    
+
                         @if (!Auth::guest() && Auth::user()->confirmed == 0)
                             <div class="form-group">
                                 <label class="col-md-10 control-label"><span class="badge badge-important">Логин не подтвержден!</span><br><small>Вы не можете добавлять объекты и просматривать контактные данные</small>

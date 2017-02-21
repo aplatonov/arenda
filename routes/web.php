@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-//Route::post('/login', 'Auth\AdvAuth@auth');
+Route::post('/login', 'Auth\AdvAuth@auth');
 
 Route::get('/home', 'HomeController@index');
 
@@ -36,4 +36,10 @@ Route::post('/objects/info/{id}','ObjectController@showContactInfo');
 Route::post('/objects/block/{id}','ObjectController@blockObject');
 
 Route::get('/admin/categories',['uses'=>'CategoryController@manageCategory']);
-Route::post('/admin/categoryAdd', 'CategoryController@addCategory');
+Route::post('/admin/categories/add/{id}', 'CategoryController@addCategory');
+
+Route::resource('requests', 'RequestController');
+Route::get('/requests','RequestController@showRequests');
+Route::delete('/requests/delete/{id}','RequestController@destroyRequest');
+Route::post('/requests/info/{id}','RequestController@showRequestContact');
+Route::post('/requests/block/{id}','RequestController@blockRequest');

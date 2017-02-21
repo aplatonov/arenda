@@ -18,4 +18,9 @@ class Categories extends Model
 	{
 		return $this->hasMany('App\Objects', 'category_id', 'id');
 	}	    
+
+	public function requests()
+	{
+		return $this->hasMany('App\Requests', 'category_id', 'id');
+	}	
 }

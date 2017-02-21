@@ -117,9 +117,14 @@ class UserController extends Controller
     {
         if (Auth::user()->role_id == 1) {
             $user = Users::findOrFail($request->input('user_id'));
-            $user->role_id = $request->input('action');
-            $user->save();
-            $data = array( 'text' => 'success' );
+            //нельзя снять права админа с самого себя и юзера с id = 1
+            if (!((Auth::user()->id == $user->id) || ($user->id == 1)))  {
+                $user->role_id = $request->input('action');
+                $user->save();
+                $data = array( 'text' => 'success' );
+            } else {
+                $data = array( 'text' => 'fail' . $request->input('action') );
+            }
         } else {
             $data = array( 'text' => 'fail' . $request->input('action') );
         }
@@ -181,17 +186,19 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = Users::find($id);
+        $userlogin = $user->login;
         $this->validate($request, [
             'email' => 'required|email|max:255',
             'name' => 'required|max:250',
             'dopname' => 'max:80',
             'phone' => 'required|max:60',
+            'pay_till' => 'date|nullable',
         ]); 
         $form = $request->all();
         $user->update($form);
 
         if (Auth::user()->role_id == 1) {
-            return redirect('/admin/users?page=' . Session::get('page',1))->with('message','Данные пользователя обновлены успешно.');
+            return redirect('/admin/users?page=' . Session::get('page',1))->with('message','Данные пользователя ' . $userlogin . ' обновлены успешно.');
         }
         else
         {

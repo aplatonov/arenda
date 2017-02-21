@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('name', 250);
             $table->string('dopname', 80);
             $table->string('phone', 60);
+            $table->datetime('pay_till')->nullable();
             $table->integer('role_id')->unsigned()->default(2);
             $table->boolean('valid')->default(false);
             $table->boolean('confirmed')->default(false);

@@ -39,16 +39,15 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return view
      */
-    public function addCategory(Request $request)
+    public function addCategory(Request $request, $id)
 
     {
-
         $this->validate($request, [
             'name_cat' => 'required',
         ]);
 
         $input = $request->all();
-        $input['parent_id'] = empty($input['parent_id']) ? 0 : $input['parent_id'];
+        $input['parent_id'] = $id;
 
         Categories::create($input);
 

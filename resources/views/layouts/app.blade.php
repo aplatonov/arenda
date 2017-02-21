@@ -14,12 +14,16 @@
         @font-face {
       font-family: 'Glyphicons Halflings';
       src: url('../fonts/glyphicons-halflings-regular.eot');
-      src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
+      src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), 
+           url('../fonts/glyphicons-halflings-regular.woff') format('woff'), 
+           url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), 
+           url('../fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
     </style>
 
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
     <link href="/css/datepicker.css" rel="stylesheet">
+    <link href="/css/treeview.css" rel="stylesheet">
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
@@ -76,6 +80,7 @@
                             <li><a href="{{ route('register') }}">Регистрация</a></li>
                         @else
                             <li><a href="{{ url('/objects') }}">Объекты</a></li>
+                            <li><a href="{{ url('/requests') }}">Заявки</a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -84,8 +89,11 @@
                                 <ul class="dropdown-menu" role="menu">
                                     @if (!Auth::guest() && Auth::user()->confirmed == 1 && Auth::user()->valid == 1)
                                         <li><a href="{{ url('/objects/create') }}">Добавить объект</a></li>
+                                        <li><a href="{{ url('/requests/create') }}">Добавить заявку</a></li>
                                     @endif
                                     <li><a href="/users/{{Auth::user()->id}}/edit">Редактировать профиль</a></li>
+                                    <li><a href="/home">На главную</a></li>
+                                    <li>&nbsp;</li>
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();

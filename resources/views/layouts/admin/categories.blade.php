@@ -1,12 +1,15 @@
 @extends('layouts.app')
 
 @section('scripts')
-    <script>
+    <script>        
         $(document).ready(function(){
+            if ($("[rel=tooltip]").length) {
+                $("[rel=tooltip]").tooltip();
+            };
             $.fn.extend({
                 treed: function (o) {
-                    var openedClass = 'icon-minus-sign';
-                    var closedClass = 'icon-plus-sign';
+                    var openedClass = 'glyphicon-minus-sign';
+                    var closedClass = 'glyphicon-plus-sign';
                     if (typeof o != 'undefined'){
                         if (typeof o.openedClass != 'undefined'){
                             openedClass = o.openedClass;
@@ -38,7 +41,7 @@
                         });
                     });
                     /* fire event to open branch if the li contains an anchor instead of text */
-                    tree.find('.branch>a').each(function () {
+                    tree.find('.branch>a#tag').each(function () {
                         $(this).on('click', function (e) {
                             $(this).closest('li').click();
                             e.preventDefault();
@@ -70,12 +73,40 @@
                 </div>
             @endif
             <div class="panel panel-default h6">
-                <div class="panel-heading"><strong>Управление категориями</strong></div>
+                <div class="panel-heading"><strong>Управление категориями (не доделано)</strong></div>
 
                 <div class="panel-body text-center"></div>
 
-                <div class="panel-footer"></div>
-                
+                <ul id="tree1" class="tree">
+                    </li>
+                    @foreach($categories as $category)
+                        <li>
+                            @if(count($category->childs))
+                                <i class="indicator glyphicon glyphicon-plus-sign"></i>
+                            @else
+                                <i class="indicator glyphicon glyphicon-minus-sign"></i>
+                            @endif
+                            {{ $category->name_cat }}
+                            @if (count($category->objects) > 0)
+                                <span class="label label-primary">{{ count($category->objects) }} объектов</span>
+                            @endif
+                            @if (count($category->requests) > 0)
+                                <span class="label label-info">{{ count($category->requests) }} заявок</span>
+                            @endif
+                            &nbsp;
+                            @if (count($category->objects) == 0 && count($category->requests) == 0)
+                                <a href="/admin/categories/delete/{{ $category->id }}" rel="tooltip" title="Удалить"><i class="glyphicon glyphicon-trash"></i></a>&nbsp;
+                            @endif
+                            <a href="/admin/categories/edit/{{ $category->id }}" rel="tooltip" title="Редактировать"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+                            <a href="/admin/categories/add/{{ $category->id }}" rel="tooltip" title="Добавить дочерний элемент"><i class="glyphicon glyphicon-leaf"></i></a>
+                            
+                            @if(count($category->childs))
+                                @include('layouts.admin.manageChild',['childs' => $category->childs])
+                            @endif
+                        </li>
+                    @endforeach
+                    <li><i class="indicator glyphicon glyphicon-leaf"></i>&nbsp;<a href="{{ url('/categories/add/0') }}">Добавить корневую категорию</a>
+                </ul>
             </div>
         </div>
     </div>
