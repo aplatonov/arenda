@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('login', 30)->unique();
             $table->string('email')->unique();
             $table->string('password', 60);
-            $table->string('name', 250);
+            $table->string('name', 190);
             $table->string('dopname', 80);
             $table->string('phone', 60);
             $table->datetime('pay_till')->nullable();
@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->boolean('valid')->default(false);
             $table->boolean('confirmed')->default(false);
             $table->string('confirmation_code')->nullable();
+            $table->string('portfolio', 190)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

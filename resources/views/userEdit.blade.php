@@ -9,7 +9,7 @@
 
                 <div class="panel-body">
 
-                    <form class="form-horizontal" role="form" method="POST" action="{{ action('UserController@update', ['user'=>$user->id]) }}">
+                    <form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" action="{{ action('UserController@update', ['user'=>$user->id]) }}">
                         {{ csrf_field() }}
                         {{ method_field('PUT') }}
 
@@ -71,6 +71,24 @@
                                 @if ($errors->has('phone'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('phone') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('portfolio') ? ' has-error' : '' }}">
+                            <label for="portfolio" class="col-md-4 control-label">Портфолио <small>(pdf, rtf, doc)</small></label>
+
+                            <div class="col-md-6">
+                                <p class="form-control-static">
+                                @if ($user->portfolio)
+                                    <a href="{{ $user->portfolio ? URL::asset('/uploads/portfolio/'.$user->id.'/'.$user->portfolio) : '' }}">Ссылка</a>
+                                @endif
+                                <input id="portfolio" type="file" name="portfolio" value="{{ old('portfolio') }}" accept=".pdf,.doc,.docx,.rtf"></p>
+
+                                @if ($errors->has('portfolio'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('portfolio') }}</strong>
                                     </span>
                                 @endif
                             </div>

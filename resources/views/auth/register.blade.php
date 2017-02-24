@@ -7,7 +7,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Регистрация</div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('register') }}">
+                    <form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" action="{{ route('register') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('login') ? ' has-error' : '' }}">
@@ -75,6 +75,20 @@
                                 @if ($errors->has('phone'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('phone') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                        
+                        <div class="form-group{{ $errors->has('portfolio') ? ' has-error' : '' }}">
+                            <label for="portfolio" class="col-md-4 control-label">Портфолио <small>(pdf, rtf, doc)</small></label>
+
+                            <div class="col-md-4">
+                                <input id="portfolio" type="file" name="portfolio" value="{{ old('portfolio') }}" accept=".pdf,.doc,.docx,.rtf">
+
+                                @if ($errors->has('portfolio'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('portfolio') }}</strong>
                                     </span>
                                 @endif
                             </div>

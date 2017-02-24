@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use File;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -54,6 +55,7 @@ class RegisterController extends Controller
             'name' => 'required|max:250',
             'dopname' => 'max:80',
             'phone' => 'required|max:60',
+            'portfolio' => 'file|max:500|mimes:pdf,doc,docx,rtf',
         ]);
     }
 
@@ -75,8 +77,15 @@ class RegisterController extends Controller
                     ->subject('Confirm registration ' . $data['login']);
             });
         */
+        
+        if(!empty($data['portfolio'])) {
+            $file = $data['portfolio'];
+            $new_file = str_random(8) . '.' . $file->getClientOriginalExtension();
+        } else {
+            $new_file = null;
+        }
 
-        return User::create([
+        $user = User::create([
             'login' => $data['login'],
             'email' => $data['email'],
             'name' => $data['name'],
@@ -84,6 +93,19 @@ class RegisterController extends Controller
             'phone' => $data['phone'],
             'password' => bcrypt($data['password']),
             'confirmation_code' => $confirmation_code,
+            'portfolio' => $new_file,
         ]);
+
+        if ($user && $new_file) {
+            $root = $_SERVER['DOCUMENT_ROOT'] . '/uploads/portfolio/' . $user->id;
+            if(!file_exists($root)) {
+                if (!mkdir($root, 0777, true)) {
+                        dump('Не могу создать папку для файлов');
+                    }
+            }
+            $file->move($root, $new_file);
+        }
+
+        return $user;
     }
 }

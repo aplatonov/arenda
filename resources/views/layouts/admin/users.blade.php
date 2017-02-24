@@ -125,19 +125,29 @@
             <div class="panel panel-default h6">
                 <div class="panel-heading"><strong>Управление пользователями</strong></div>
 
-                <div class="panel-body text-center"></div>
+                <div class="panel-body text-center"> 
+                    <div class="well well-sm">
+                        <form class="form-inline text-right" method="GET" action="{{url('/admin/users')}}">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-sm" id="searchText" name="searchText" value="{{ Request::get('searchText') }}" size="30" placeholder="login, имя, телефон или email">
+                            </div>
+                            <button type="submit" class="btn btn-info btn-sm">Найти</button>
+                            <a href="{{ url('/admin/users') }}"><button type="button" class="btn btn-default btn-sm">Очистить</button></a>
+                        </form>
+                    </div>
+                </div>
                 
                 <div class="table-responsive"> 
 
                     <table class="table table-striped table-hover table-condensed">
                     <tr>
-                        <th><a href="?page={{ $data['users']->currentPage() }}&order=id&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">ID</a>{!! $data['page_appends']['order'] == 'id' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
-                        <th><a href="?page={{ $data['users']->currentPage() }}&order=login&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Login</a>{!! $data['page_appends']['order'] == 'login' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
-                        <th><a href="?page={{ $data['users']->currentPage() }}&order=name&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Имя</a>{!! $data['page_appends']['order'] == 'name' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
-                        <th><a href="?page={{ $data['users']->currentPage() }}&order=phone&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Телефон, e-mail</a>{!! $data['page_appends']['order'] == 'phone' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
-                        <th class="text-center"><a href="?page={{ $data['users']->currentPage() }}&order=role_id&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Дать роль</a>{!! $data['page_appends']['order'] == 'role_id' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
-                        <th class="text-center"><a href="?page={{ $data['users']->currentPage() }}&order=confirmed&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Подтвержден</a>{!! $data['page_appends']['order'] == 'confirmed' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
-                        <th class="text-center"><a href="?page={{ $data['users']->currentPage() }}&order=valid&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}">Просмотр контактов</a>{!! $data['page_appends']['order'] == 'valid' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th><a href="?page={{ $data['users']->currentPage() }}&order=id&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}{{ $data['searchText'] ? '&searchText='.$data['searchText'] : '' }}">ID</a>{!! $data['page_appends']['order'] == 'id' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th><a href="?page={{ $data['users']->currentPage() }}&order=login&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}{{ $data['searchText'] ? '&searchText='.$data['searchText'] : '' }}">Login</a>{!! $data['page_appends']['order'] == 'login' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th><a href="?page={{ $data['users']->currentPage() }}&order=name&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}{{ $data['searchText'] ? '&searchText='.$data['searchText'] : '' }}">Имя</a>{!! $data['page_appends']['order'] == 'name' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th><a href="?page={{ $data['users']->currentPage() }}&order=phone&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}{{ $data['searchText'] ? '&searchText='.$data['searchText'] : '' }}">Телефон, e-mail</a>{!! $data['page_appends']['order'] == 'phone' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th class="text-center"><a href="?page={{ $data['users']->currentPage() }}&order=role_id&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}{{ $data['searchText'] ? '&searchText='.$data['searchText'] : '' }}">Дать роль</a>{!! $data['page_appends']['order'] == 'role_id' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th class="text-center"><a href="?page={{ $data['users']->currentPage() }}&order=confirmed&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}{{ $data['searchText'] ? '&searchText='.$data['searchText'] : '' }}">Подтвержден</a>{!! $data['page_appends']['order'] == 'confirmed' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
+                        <th class="text-center"><a href="?page={{ $data['users']->currentPage() }}&order=valid&dir={{ $data['dir'] ? $data['dir'] : 'asc' }}{{ $data['searchText'] ? '&searchText='.$data['searchText'] : '' }}">Просмотр контактов</a>{!! $data['page_appends']['order'] == 'valid' ? $data['dir'] == 'desc' ? '<span class="glyphicon glyphicon-arrow-down"></span>' : '<span class="glyphicon glyphicon-arrow-up"></span>' : '' !!}</th>
                         <th class="text-right">Удалить</th>
                     </tr>
 

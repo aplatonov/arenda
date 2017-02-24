@@ -145,6 +145,7 @@
                                 </ul>
                             </li>
                         @endif
+                        <li><a href="{{ url('/contacts') }}">Контакт</a></li>
                     </ul>
                 </div>
             </div>

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Input;
 use Exception;
 use Response;
 use App\Users;
+use File;
 
 class UserController extends Controller
 {
@@ -46,8 +47,19 @@ class UserController extends Controller
         $order = $request->get('order'); 
         $dir = $request->get('dir'); 
         $page_appends = null;
+        $searchText = $request->get('searchText');
 
         $users = Users::whereIn('valid', [0, 1]);
+
+        //добавляем условия поиска, если они заданы
+        if (!empty($searchText)) {
+            $users = $users
+                        ->where('login', 'LIKE', '%' . $searchText . '%')
+                        ->orWhere('name', 'LIKE', '%' . $searchText . '%')
+                        ->orWhere('dopname', 'LIKE', '%' . $searchText . '%')
+                        ->orWhere('email', 'LIKE', '%' . $searchText . '%')
+                        ->orWhere('phone', 'LIKE', '%' . $searchText . '%');
+        }
 
         if ($order && $dir) {
             $users = $users->orderBy($order, $dir);
@@ -57,14 +69,15 @@ class UserController extends Controller
             ];
         } 
 
-        $users = $users->paginate(config('app.users_on_page_admin'));
+        $users = $users->paginate(config('app.users_on_page_admin'))->appends(['searchText' => $searchText]);
         Session::put('page', $users->currentPage());
 
         $data['users'] = $users;
         $data['dir'] = $dir == 'asc' ? 'desc' : 'asc';
         $data['page_appends'] = $page_appends;
+        $data['searchText'] = $searchText;
 
-        return view('layouts/admin/users', ['data' => $data, 'message'=>'']);
+        return view('layouts.admin.users', ['data' => $data, 'message'=>'']);
     }
 
     /**
@@ -79,6 +92,8 @@ class UserController extends Controller
             $user = Users::findOrFail($id);
             $username = $user->username;
             try {
+                $root = $_SERVER['DOCUMENT_ROOT'] . '/uploads/portfolio/' . $user->id;
+                File::deleteDirectory($root);
                 $user->delete();
                 return redirect()->back()->with('message', 'Пользователь '.$username.' удален');
             } catch (Exception $e) {
@@ -205,14 +220,38 @@ class UserController extends Controller
     {
         $user = Users::find($id);
         $userlogin = $user->login;
+        $oldfile = $user->portfolio;
         $this->validate($request, [
             'email' => 'required|email|max:255',
             'name' => 'required|max:250',
             'dopname' => 'max:80',
             'phone' => 'required|max:60',
             'pay_till' => 'date|nullable',
+            'portfolio' => 'file|max:500|mimes:pdf,doc,docx,rtf',
         ]); 
         $form = $request->all();
+        //dd($oldfile, $form);
+
+        if(!empty($form['portfolio'])) {
+            $file = $form['portfolio'];
+            $new_file = str_random(8) . '.' . $file->getClientOriginalExtension();
+            $root = $_SERVER['DOCUMENT_ROOT'] . '/uploads/portfolio/' . $user->id;
+            if(!file_exists($root)) {
+                if (!mkdir($root, 0777, true)) {
+                        dump('Не могу создать папку для файлов');
+                    }
+            }
+            $file->move($root, $new_file);
+            if (!empty($oldfile)) {
+                File::delete($root.'/'.$oldfile);
+            }
+
+            $form['portfolio'] = $new_file;
+        } else {
+            $form['portfolio'] = $oldfile;
+        }
+        //dd($form, $oldfile, $new_file);
+
         $user->update($form);
 
         if (Auth::user()->role_id == 1) {

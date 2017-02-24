@@ -50,3 +50,7 @@ Route::post('/requests/info/{id}','RequestController@showRequestContact');
 Route::post('/requests/block/{id}','RequestController@blockRequest');
 Route::get('/userrequests', 'RequestController@indexUserRequests');
 Route::get('/requests/category/{id}','RequestController@indexCategoryRequests');
+
+
+Route::get('contacts', 'EmailController@contacts');
+Route::post('send', 'EmailController@send');

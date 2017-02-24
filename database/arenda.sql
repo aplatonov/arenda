@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.4.10
+-- version 4.0.10deb1
 -- http://www.phpmyadmin.net
 --
--- Host: localhost:8889
--- Generation Time: Feb 21, 2017 at 05:53 PM
--- Server version: 5.5.42
--- PHP Version: 5.6.10
+-- Host: localhost
+-- Generation Time: Feb 24, 2017 at 10:45 PM
+-- Server version: 5.5.54-0ubuntu0.14.04.1
+-- PHP Version: 5.6.30-1+deb.sury.org~trusty+1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `arenda`
@@ -26,13 +26,14 @@ SET time_zone = "+00:00";
 -- Table structure for table `categories`
 --
 
-CREATE TABLE `categories` (
-  `id` int(10) unsigned NOT NULL,
+CREATE TABLE IF NOT EXISTS `categories` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name_cat` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `parent_id` int(10) unsigned DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=28 ;
 
 --
 -- Dumping data for table `categories`
@@ -65,11 +66,12 @@ INSERT INTO `categories` (`id`, `name_cat`, `parent_id`, `created_at`, `updated_
 -- Table structure for table `migrations`
 --
 
-CREATE TABLE `migrations` (
-  `id` int(10) unsigned NOT NULL,
+CREATE TABLE IF NOT EXISTS `migrations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `batch` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `batch` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `migrations`
@@ -89,8 +91,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 -- Table structure for table `objects`
 --
 
-CREATE TABLE `objects` (
-  `id` int(10) unsigned NOT NULL,
+CREATE TABLE IF NOT EXISTS `objects` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `object_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `images` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -104,8 +106,13 @@ CREATE TABLE `objects` (
   `disabled` tinyint(1) NOT NULL DEFAULT '0',
   `customer_id` int(10) unsigned DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `objects_object_name_unique` (`object_name`),
+  KEY `objects_owner_id_foreign` (`owner_id`),
+  KEY `objects_category_id_foreign` (`category_id`),
+  KEY `objects_customer_id_foreign` (`customer_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=13 ;
 
 --
 -- Dumping data for table `objects`
@@ -118,7 +125,7 @@ INSERT INTO `objects` (`id`, `object_name`, `description`, `images`, `category_i
 (8, 'Чайник кранышленный', 'ыждвьждавыа\r\nыжвьвлжа\r\nыдвлаыдвоалд\r\n1200', NULL, 9, 2012, 'час', 1, 50.00, 7, '2017-02-25 00:00:00', 0, NULL, '2017-02-11 18:18:06', '2017-02-18 16:30:38'),
 (9, 'Ковш', 'ждыжалдвждла\r\nыфдвалдылова\r\nыдвладылвоа\r\nыдлвадыфвлоа', NULL, 10, 1999, 'час', 2, 200.00, 3, NULL, 0, NULL, '2017-02-13 17:57:58', '2017-02-13 17:57:58'),
 (10, 'Черпак', 'жыдфлвжа\r\nжфылождылфва\r\nцжуложвыажф\r\n\r\nыфловаж', NULL, 13, 1900, 'час', NULL, 230.00, 3, '2017-03-05 00:00:00', 0, NULL, '2017-02-13 17:58:40', '2017-02-21 13:47:58'),
-(11, 'Гидрач', 'ыва\r\n222\r\n333', NULL, 18, 2000, 'сут.', 5, 900.00, 3, NULL, 0, NULL, '2017-02-13 18:04:57', '2017-02-13 18:15:36'),
+(11, 'Гидрач', 'ыва\r\n222\r\n333', NULL, 6, 2000, 'сут.', 5, 900.00, 3, NULL, 0, NULL, '2017-02-13 18:04:57', '2017-02-13 18:15:36'),
 (12, 'Недамудалить', 'ыавываы\r\nвыа\r\nыв\r\nаыв\r\nа', NULL, 23, 1999, 'час', NULL, 900.00, 1, NULL, 0, NULL, '2017-02-21 08:50:15', '2017-02-21 08:50:15');
 
 -- --------------------------------------------------------
@@ -127,10 +134,12 @@ INSERT INTO `objects` (`id`, `object_name`, `description`, `images`, `category_i
 -- Table structure for table `password_resets`
 --
 
-CREATE TABLE `password_resets` (
+CREATE TABLE IF NOT EXISTS `password_resets` (
   `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `token` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL
+  `created_at` timestamp NULL DEFAULT NULL,
+  KEY `password_resets_email_index` (`email`),
+  KEY `password_resets_token_index` (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -139,8 +148,8 @@ CREATE TABLE `password_resets` (
 -- Table structure for table `requests`
 --
 
-CREATE TABLE `requests` (
-  `id` int(10) unsigned NOT NULL,
+CREATE TABLE IF NOT EXISTS `requests` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `request_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `comment` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `category_id` int(10) unsigned NOT NULL,
@@ -150,8 +159,13 @@ CREATE TABLE `requests` (
   `customer_id` int(10) unsigned DEFAULT NULL,
   `disabled` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `requests_request_name_unique` (`request_name`),
+  KEY `requests_owner_id_foreign` (`owner_id`),
+  KEY `requests_category_id_foreign` (`category_id`),
+  KEY `requests_customer_id_foreign` (`customer_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `requests`
@@ -170,13 +184,14 @@ INSERT INTO `requests` (`id`, `request_name`, `comment`, `category_id`, `start_d
 -- Table structure for table `roles`
 --
 
-CREATE TABLE `roles` (
-  `id` int(10) unsigned NOT NULL,
+CREATE TABLE IF NOT EXISTS `roles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `roles`
@@ -192,8 +207,8 @@ INSERT INTO `roles` (`id`, `title`, `slug`, `created_at`, `updated_at`) VALUES
 -- Table structure for table `users`
 --
 
-CREATE TABLE `users` (
-  `id` int(10) unsigned NOT NULL,
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `login` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -205,119 +220,34 @@ CREATE TABLE `users` (
   `valid` tinyint(1) NOT NULL DEFAULT '0',
   `confirmed` tinyint(1) NOT NULL DEFAULT '0',
   `confirmation_code` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `portfolio` varchar(190) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_login_unique` (`login`),
+  UNIQUE KEY `users_email_unique` (`email`),
+  KEY `users_role_id_foreign` (`role_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=30 ;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `login`, `email`, `password`, `name`, `dopname`, `phone`, `role_id`, `pay_till`, `valid`, `confirmed`, `confirmation_code`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'a432974@yandex.ru', '$2y$10$0/HQaBzhVs7rFNj19p0n2O/CiljebCftmFa6IdcKFnRxKKeI2HB4u', 'ООО "Техника в аренду"', 'менеджер Петрова Юлия', '+7-927-456-78-90', 1, '2017-02-23 00:00:00', 1, 1, NULL, 'YyEyXTq9sxNryvoE4F85arj0MnqNQP4NDO7H2AwnterCqUFYGISqi6BjFU0j', NULL, '2017-02-18 19:51:53'),
-(2, 'user', 'fake@yandex.ru', '$2y$10$dLJ0492oUF4hYGin/GhY5eUz0s6aKDgxsfS645rASo5q91Kt26sgO', 'ИП "Копатель"', 'директор Копков Игорь', '+7-123-456-78-90', 2, NULL, 1, 1, NULL, 'gJ1nfwSkf3yEob6VjlgQflQMUnuUsOP3Xwq6N9H2z6hPd0YqEqi9lSgTbDA0', NULL, '2017-02-18 19:53:05'),
-(3, 'new', 'new@newr.ru', '$2y$10$7uJpvK6Ngzwbn5LHaCTLF.knws4xGH83/QSifChMSha92jTdaguzu', 'ИП "Новый"', 'менеджер Женя', '12345', 2, '2017-03-05 00:00:00', 1, 1, 'PJJQxl5zIZ89J8XvXfUK29Q49e3FY5V7', 'RkYqb080DXJdgnlztWhLxtnaHk4N7iqBG5OHjjkNWlPUlfmjaCn0zvdE1rbe', '2017-02-04 12:46:05', '2017-02-18 19:53:07'),
-(5, 'mmm', 'mmmm@mmmm.mm', '$2y$10$adhvlPv/qfp.BsHV5scB5eii3DrRwcarEYBzBuMr7IfdouqjxQw6G', 'Mamba', 'Петрович', '12344223', 2, NULL, 1, 1, '4rHhLSIvhbcO46kLhrKTlYne1Rw0q1Yo', 'tfSl1tbJ2JOkYa8T2LM2jvC06xEgWPtKmcVXWBxynENSpusBNFPdosGUIA7f', '2017-02-07 17:08:53', '2017-02-07 18:58:27'),
-(6, 'ttt', 'ttt@ttt.tt', '$2y$10$c5n/sMEsdbeuiAvK1pWoTeFgZ4BbcYtoTJB7NS8zx5LNcP/0nnvp6', 'Нормальное имя', 'Петрович', '345-053', 2, '2017-02-19 00:00:00', 0, 1, 'NfTaUjAMNUyvYKsQQVlq68KEFjo3pGiz', 'V6HZA4M1bFbj89DCsQ1bDerISKOfQ8Ir9VGkRZFnKjZY5JfD7ZcWHifXug3d', '2017-02-07 19:00:41', '2017-02-14 18:03:29'),
-(7, 'rrrr', 'rrr@rrr.rrr', '$2y$10$djJJH9da1tkffvT2vHBr7ehDVy9BrM9p7h4TXBJSHAz3gnX5ON2nK', 'ИП "Сдавалкин"', 'Александр первый', '+7 923 334 23 12', 2, NULL, 1, 1, 'xwVxocdW95peeK9QsvrNUoewTeQ2PPFl', 'ChxTfP6pEZ7El6onOnIiEOuDZPuBq7SJRpALW3ejY1bxt4T0waXw5n4FJw0J', '2017-02-11 12:54:30', '2017-02-14 18:14:49'),
-(8, 'eee', 'eee@eee.eee', '$2y$10$hlSFAopiKrT2cJXAr9IvhuVDzfhlaxaukT1AUSgeZSHL892OF3UH2', 'ООО "Пирожки из теста"', 'Сигал Стивен', '(8422) 123-332', 2, NULL, 1, 1, 'bp5nQLzft4eDZmPnyFPPqBV0bSYv1r5T', 'nNWQVYqqpgyUxaJ2mxqHFGo9uQHrStLPIbYoLjkfOdSQ3QNPWDkxVbX18FRf', '2017-02-11 12:57:34', '2017-02-11 13:02:54'),
-(9, 'uuu', 'uuu@uuu.ru', '$2y$10$I3h0YjB2ILVSISeG/0BPRepRx7j5nqwjIXZSC7SkZZ4RIYyoQEOvO', 'Ух ты', 'Матроскин', '927-332-22-11', 2, '2017-02-13 00:00:00', 0, 0, 'sIvE3duTl9alS4PMQeiMtePO5gnbIWIa', 'GNDU72R2T5QD698rMsCCXLumuqZWKkyr61op92OOqOcRe15i1gq7WzFVXd4j', '2017-02-14 18:32:50', '2017-02-14 18:40:33'),
-(10, 'kkk', 'kkk@kkk.kkk', '$2y$10$h/oUpTjmf.U9g1TnxlE1wer3JsiqDqW3a9JjUAuo4tmBhakrOt00S', 'Кафе "Картошка"', 'официант Джастин', '123 12312-21', 2, NULL, 1, 1, 'RULvthykVBpH01IRDQBvGYB2DjKmD0C1', 'DaOi2bg2uN0ob9TTf5jWNbT0mbS6M1NvVrCuzKq0OK489NtsjurAhZ63fXKb', '2017-02-18 19:02:52', '2017-02-18 19:05:53'),
-(11, 'zzz', 'zzz@zzz.zzz', '$2y$10$cTMYeg2YvQ/E3jMIjXKZi.wypnqpELVxEH07/Jhlgv44DiiroZEeS', 'zzz', 'zzz', '213', 2, NULL, 1, 1, 'YeL9I0E6nbu58EMGAs17GSFzMEotqTOv', 'VMneaCjXt4z01Yhj1AI2HH8FkUpNOfa13xOl3Tdqrasa74QQjm1HqyJKcJ2s', '2017-02-18 19:07:52', '2017-02-18 19:08:41');
+INSERT INTO `users` (`id`, `login`, `email`, `password`, `name`, `dopname`, `phone`, `role_id`, `pay_till`, `valid`, `confirmed`, `confirmation_code`, `portfolio`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'admin', 'a432974@yandex.ru', '$2y$10$0/HQaBzhVs7rFNj19p0n2O/CiljebCftmFa6IdcKFnRxKKeI2HB4u', 'ООО "Техника в аренду"', 'менеджер Петрова Юлия', '+7-927-456-78-90', 1, '2017-02-23 00:00:00', 1, 1, NULL, NULL, 'jn4SBZ3eYosNIsqJdGJAtFImOWPriytQjGAmmGlN4GjEAxyYBDqeRTeUFIX6', NULL, '2017-02-24 14:02:28'),
+(2, 'user', 'fake@yandex.ru', '$2y$10$dLJ0492oUF4hYGin/GhY5eUz0s6aKDgxsfS645rASo5q91Kt26sgO', 'ИП "Копатель"', 'директор Копков Игорь', '+7-123-456-78-90', 2, NULL, 1, 1, NULL, NULL, 'gJ1nfwSkf3yEob6VjlgQflQMUnuUsOP3Xwq6N9H2z6hPd0YqEqi9lSgTbDA0', NULL, '2017-02-18 19:53:05'),
+(3, 'new', 'new@newr.ru', '$2y$10$7uJpvK6Ngzwbn5LHaCTLF.knws4xGH83/QSifChMSha92jTdaguzu', 'ИП "Новый"', 'менеджер Женя', '12345', 2, '2017-03-05 00:00:00', 1, 1, 'PJJQxl5zIZ89J8XvXfUK29Q49e3FY5V7', NULL, 'RkYqb080DXJdgnlztWhLxtnaHk4N7iqBG5OHjjkNWlPUlfmjaCn0zvdE1rbe', '2017-02-04 12:46:05', '2017-02-18 19:53:07'),
+(5, 'mmm', 'mmmm@mmmm.mm', '$2y$10$adhvlPv/qfp.BsHV5scB5eii3DrRwcarEYBzBuMr7IfdouqjxQw6G', 'Mamba', 'Петрович', '12344223', 2, NULL, 1, 1, '4rHhLSIvhbcO46kLhrKTlYne1Rw0q1Yo', NULL, 'tfSl1tbJ2JOkYa8T2LM2jvC06xEgWPtKmcVXWBxynENSpusBNFPdosGUIA7f', '2017-02-07 17:08:53', '2017-02-07 18:58:27'),
+(6, 'ttt', 'ttt@ttt.tt', '$2y$10$c5n/sMEsdbeuiAvK1pWoTeFgZ4BbcYtoTJB7NS8zx5LNcP/0nnvp6', 'Нормальное имя', 'Петрович', '345-053', 2, '2017-02-19 00:00:00', 0, 1, 'NfTaUjAMNUyvYKsQQVlq68KEFjo3pGiz', NULL, 'V6HZA4M1bFbj89DCsQ1bDerISKOfQ8Ir9VGkRZFnKjZY5JfD7ZcWHifXug3d', '2017-02-07 19:00:41', '2017-02-14 18:03:29'),
+(7, 'rrrr', 'rrr@rrr.rrr', '$2y$10$djJJH9da1tkffvT2vHBr7ehDVy9BrM9p7h4TXBJSHAz3gnX5ON2nK', 'ИП "Сдавалкин"', 'Александр первый', '+7 923 334 23 12', 2, NULL, 1, 1, 'xwVxocdW95peeK9QsvrNUoewTeQ2PPFl', NULL, 'ChxTfP6pEZ7El6onOnIiEOuDZPuBq7SJRpALW3ejY1bxt4T0waXw5n4FJw0J', '2017-02-11 12:54:30', '2017-02-14 18:14:49'),
+(8, 'eee', 'eee@eee.eee', '$2y$10$hlSFAopiKrT2cJXAr9IvhuVDzfhlaxaukT1AUSgeZSHL892OF3UH2', 'ООО "Пирожки из теста"', 'Сигал Стивен', '(8422) 123-332', 2, NULL, 1, 1, 'bp5nQLzft4eDZmPnyFPPqBV0bSYv1r5T', NULL, 'nNWQVYqqpgyUxaJ2mxqHFGo9uQHrStLPIbYoLjkfOdSQ3QNPWDkxVbX18FRf', '2017-02-11 12:57:34', '2017-02-11 13:02:54'),
+(9, 'uuu', 'uuu@uuu.ru', '$2y$10$I3h0YjB2ILVSISeG/0BPRepRx7j5nqwjIXZSC7SkZZ4RIYyoQEOvO', 'Ух ты', 'Матроскин', '927-332-22-11', 2, '2017-02-13 00:00:00', 0, 0, 'sIvE3duTl9alS4PMQeiMtePO5gnbIWIa', NULL, 'GNDU72R2T5QD698rMsCCXLumuqZWKkyr61op92OOqOcRe15i1gq7WzFVXd4j', '2017-02-14 18:32:50', '2017-02-14 18:40:33'),
+(10, 'kkk', 'kkk@kkk.kkk', '$2y$10$h/oUpTjmf.U9g1TnxlE1wer3JsiqDqW3a9JjUAuo4tmBhakrOt00S', 'Кафе "Картошка"', 'официант Джастин', '123 12312-21', 2, NULL, 1, 1, 'RULvthykVBpH01IRDQBvGYB2DjKmD0C1', NULL, 'DaOi2bg2uN0ob9TTf5jWNbT0mbS6M1NvVrCuzKq0OK489NtsjurAhZ63fXKb', '2017-02-18 19:02:52', '2017-02-18 19:05:53'),
+(11, 'zzz', 'zzz@zzz.zzz', '$2y$10$cTMYeg2YvQ/E3jMIjXKZi.wypnqpELVxEH07/Jhlgv44DiiroZEeS', 'zzz', 'zzz', '213', 2, NULL, 1, 1, 'YeL9I0E6nbu58EMGAs17GSFzMEotqTOv', NULL, 'VMneaCjXt4z01Yhj1AI2HH8FkUpNOfa13xOl3Tdqrasa74QQjm1HqyJKcJ2s', '2017-02-18 19:07:52', '2017-02-18 19:08:41'),
+(19, 'sss', 'sss@sss.ss', '$2y$10$kP5itBTRUYiFtEkOFRqRkeqyqB9g.dbZkDKMbAcqey/n6LqmpSWFi', 'sss', 'sss', 'sss', 2, NULL, 1, 1, 'xQYGHnyMlD3Omyhmv1T2vLrE21QJ2S87', 'qqYxPiEM.pdf', 'o4z4pzGBQ2gQAfwZJ2XEIFqYsts87sFHMBjMJKDwxqKTDbZSOYOTfPJAV7T1', '2017-02-24 11:20:35', '2017-02-24 11:20:35'),
+(29, 'vvv', 'vvv@vvv.vv', '$2y$10$LBNcrQ.LEY50OtLcEnDTSOiF.A8odv2anyO.voo/T8dge85tkZeFS', 'vvv', 'vvv', 'vvv', 2, NULL, 0, 0, 'gkVZAl7ZB7Asf6aOJJ733wpmnCWe6Un4', 'kfpdHzG8.pdf', 'rIpI42Dzx5G5ULBAF32AXI2NrslMrEYzHRdUcQvKOy0niMdBhjqAUe2z9xLO', '2017-02-24 14:56:21', '2017-02-24 14:57:08');
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `categories`
---
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `migrations`
---
-ALTER TABLE `migrations`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `objects`
---
-ALTER TABLE `objects`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `objects_object_name_unique` (`object_name`),
-  ADD KEY `objects_owner_id_foreign` (`owner_id`),
-  ADD KEY `objects_category_id_foreign` (`category_id`),
-  ADD KEY `objects_customer_id_foreign` (`customer_id`);
-
---
--- Indexes for table `password_resets`
---
-ALTER TABLE `password_resets`
-  ADD KEY `password_resets_email_index` (`email`),
-  ADD KEY `password_resets_token_index` (`token`);
-
---
--- Indexes for table `requests`
---
-ALTER TABLE `requests`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `requests_request_name_unique` (`request_name`),
-  ADD KEY `requests_owner_id_foreign` (`owner_id`),
-  ADD KEY `requests_category_id_foreign` (`category_id`),
-  ADD KEY `requests_customer_id_foreign` (`customer_id`);
-
---
--- Indexes for table `roles`
---
-ALTER TABLE `roles`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `users_login_unique` (`login`),
-  ADD UNIQUE KEY `users_email_unique` (`email`),
-  ADD KEY `users_role_id_foreign` (`role_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `categories`
---
-ALTER TABLE `categories`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=28;
---
--- AUTO_INCREMENT for table `migrations`
---
-ALTER TABLE `migrations`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT for table `objects`
---
-ALTER TABLE `objects`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
---
--- AUTO_INCREMENT for table `requests`
---
-ALTER TABLE `requests`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT for table `roles`
---
-ALTER TABLE `roles`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- Constraints for dumped tables
 --
